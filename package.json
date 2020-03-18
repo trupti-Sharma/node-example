@@ -8,7 +8,9 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "@hapi/joi": "17.1.0"
+    "@hapi/hapi": "19.1.1",
+    "@hapi/joi": "17.1.0",
+    "@hapi/joi-date": "2.0.1"
   },
   "devDependencies": {
     "@babel/core": "7.2.0",

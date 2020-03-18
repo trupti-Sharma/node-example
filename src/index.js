@@ -1,53 +1,46 @@
-const Joi = require("@hapi/joi");
+const Joi = require("@hapi/joi").extend(require("@hapi/joi-date"));
+const schema = Joi.object().keys({
+  username: Joi.string()
+    .alphanum()
+    .min(3)
+    .max(30)
+    .required(),
 
-const schema = Joi.object()
-  .keys({
-    username: Joi.string()
-      .alphanum()
-      .min(3)
-      .max(30)
-      .required(),
-    /*     .messages({
-        "string.base": `"username" should be a type of 'text'`,
-        "string.empty": `"username" cannot be an empty field`,
-        "string.min": `"username" should have a minimum length of {#limit}`,
-        "any.required": `"username" is a required field`
-      }),
-*/
-    password: Joi.string().pattern(
-      new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})")
-    ),
-    repeat_password: Joi.ref("password"),
+  password: Joi.string().pattern(
+    new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})")
+  ),
+  repeat_password: Joi.ref("password"),
+  date: Joi.date()
+    .format("DD-MMM-YYYY")
+    .utc(),
+  access_token: [Joi.string(), Joi.number()],
 
-    access_token: [Joi.string(), Joi.number()],
+  birth_year: Joi.number()
+    .integer()
+    .min(1900)
+    .max(2013),
 
-    birth_year: Joi.number()
-      .integer()
-      .min(1900)
-      .max(2013),
-
-    email: Joi.string().email({
-      minDomainSegments: 2,
-      tlds: { allow: ["com", "net"] }
-    })
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net"] }
   })
-  .with("username", "birth_year")
-  .with("password", "repeat_password");
+});
 
 let username = "Trupti";
 let password = "trupTI@1234";
-let access_token = "trupTI1234";
+let access_token = "trupTI@1234";
 let birth_year = "2011";
 let repeat_password = "trupTI@1234";
 let email = "truptisharma336@gmail.com";
-
+let date = "02-NOV-1999";
 const { error, value } = schema.validate({
   username: username,
   password: password,
   repeat_password: repeat_password,
   access_token: access_token,
   birth_year: birth_year,
-  email: email
+  email: email,
+  date: date
 });
 
 if (error) {
